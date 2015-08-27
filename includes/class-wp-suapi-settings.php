@@ -107,110 +107,39 @@ class WP_SUAPI_Settings {
 	 */
 	private function settings_fields () {
 
-		$settings['standard'] = array(
-			'title'					=> __( 'Standard', 'wp-suapi' ),
-			'description'			=> __( 'These are fairly standard form input fields.', 'wp-suapi' ),
+		$settings['apiconnection'] = array(
+			'title'					=> __( 'API Connection', 'wp-suapi' ),
+			'description'			=> __( 'swiss unihockey API Connection', 'wp-suapi' ),
 			'fields'				=> array(
 				array(
-					'id' 			=> 'text_field',
-					'label'			=> __( 'Some Text' , 'wp-suapi' ),
-					'description'	=> __( 'This is a standard text field.', 'wp-suapi' ),
+					'id' 			=> 'suapi-api-url',
+					'label'			=> __( 'API URL' , 'wp-suapi' ),
+					'description'	=> __( 'URL to the swiss unihockey API.', 'wp-suapi' ),
+					'type'			=> 'text',
+					'default'		=> 'https://api-v2.swissunihockey.ch/api',
+					'placeholder'	=> __( 'https://api-v2.swissunihockey.ch/api', 'wp-suapi' )
+				),
+				array(
+					'id' 			=> 'suapi-api-key',
+					'label'			=> __( 'API Key' , 'wp-suapi' ),
+					'description'	=> __( 'Key to the API', 'wp-suapi' ),
 					'type'			=> 'text',
 					'default'		=> '',
-					'placeholder'	=> __( 'Placeholder text', 'wp-suapi' )
-				),
-				array(
-					'id' 			=> 'password_field',
-					'label'			=> __( 'A Password' , 'wp-suapi' ),
-					'description'	=> __( 'This is a standard password field.', 'wp-suapi' ),
-					'type'			=> 'password',
-					'default'		=> '',
-					'placeholder'	=> __( 'Placeholder text', 'wp-suapi' )
-				),
-				array(
-					'id' 			=> 'secret_text_field',
-					'label'			=> __( 'Some Secret Text' , 'wp-suapi' ),
-					'description'	=> __( 'This is a secret text field - any data saved here will not be displayed after the page has reloaded, but it will be saved.', 'wp-suapi' ),
-					'type'			=> 'text_secret',
-					'default'		=> '',
-					'placeholder'	=> __( 'Placeholder text', 'wp-suapi' )
-				),
-				array(
-					'id' 			=> 'text_block',
-					'label'			=> __( 'A Text Block' , 'wp-suapi' ),
-					'description'	=> __( 'This is a standard text area.', 'wp-suapi' ),
-					'type'			=> 'textarea',
-					'default'		=> '',
-					'placeholder'	=> __( 'Placeholder text for this textarea', 'wp-suapi' )
-				),
-				array(
-					'id' 			=> 'single_checkbox',
-					'label'			=> __( 'An Option', 'wp-suapi' ),
-					'description'	=> __( 'A standard checkbox - if you save this option as checked then it will store the option as \'on\', otherwise it will be an empty string.', 'wp-suapi' ),
-					'type'			=> 'checkbox',
-					'default'		=> ''
-				),
-				array(
-					'id' 			=> 'select_box',
-					'label'			=> __( 'A Select Box', 'wp-suapi' ),
-					'description'	=> __( 'A standard select box.', 'wp-suapi' ),
-					'type'			=> 'select',
-					'options'		=> array( 'drupal' => 'Drupal', 'joomla' => 'Joomla', 'wordpress' => 'WordPress' ),
-					'default'		=> 'wordpress'
-				),
-				array(
-					'id' 			=> 'radio_buttons',
-					'label'			=> __( 'Some Options', 'wp-suapi' ),
-					'description'	=> __( 'A standard set of radio buttons.', 'wp-suapi' ),
-					'type'			=> 'radio',
-					'options'		=> array( 'superman' => 'Superman', 'batman' => 'Batman', 'ironman' => 'Iron Man' ),
-					'default'		=> 'batman'
-				),
-				array(
-					'id' 			=> 'multiple_checkboxes',
-					'label'			=> __( 'Some Items', 'wp-suapi' ),
-					'description'	=> __( 'You can select multiple items and they will be stored as an array.', 'wp-suapi' ),
-					'type'			=> 'checkbox_multi',
-					'options'		=> array( 'square' => 'Square', 'circle' => 'Circle', 'rectangle' => 'Rectangle', 'triangle' => 'Triangle' ),
-					'default'		=> array( 'circle', 'triangle' )
+					'placeholder'	=> __( 'Your personal key', 'wp-suapi' )
 				)
 			)
 		);
 
 		$settings['extra'] = array(
 			'title'					=> __( 'Extra', 'wp-suapi' ),
-			'description'			=> __( 'These are some extra input fields that maybe aren\'t as common as the others.', 'wp-suapi' ),
+			'description'			=> __( 'WP SUAPI Plugin settings', 'wp-suapi' ),
 			'fields'				=> array(
 				array(
-					'id' 			=> 'number_field',
-					'label'			=> __( 'A Number' , 'wp-suapi' ),
-					'description'	=> __( 'This is a standard number field - if this field contains anything other than numbers then the form will not be submitted.', 'wp-suapi' ),
-					'type'			=> 'number',
-					'default'		=> '',
-					'placeholder'	=> __( '42', 'wp-suapi' )
-				),
-				array(
-					'id' 			=> 'colour_picker',
-					'label'			=> __( 'Pick a colour', 'wp-suapi' ),
-					'description'	=> __( 'This uses WordPress\' built-in colour picker - the option is stored as the colour\'s hex code.', 'wp-suapi' ),
-					'type'			=> 'color',
-					'default'		=> '#21759B'
-				),
-				array(
-					'id' 			=> 'an_image',
-					'label'			=> __( 'An Image' , 'wp-suapi' ),
-					'description'	=> __( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'wp-suapi' ),
-					'type'			=> 'image',
-					'default'		=> '',
-					'placeholder'	=> ''
-				),
-				array(
-					'id' 			=> 'multi_select_box',
-					'label'			=> __( 'A Multi-Select Box', 'wp-suapi' ),
-					'description'	=> __( 'A standard multi-select box - the saved data is stored as an array.', 'wp-suapi' ),
-					'type'			=> 'select_multi',
-					'options'		=> array( 'linux' => 'Linux', 'mac' => 'Mac', 'windows' => 'Windows' ),
-					'default'		=> array( 'linux' )
+					'id' 			=> 'suapi-extra-usecache',
+					'label'			=> __( 'Use cache', 'wp-suapi' ),
+					'description'	=> __( 'Use a 12 hours cache for API results', 'wp-suapi' ),
+					'type'			=> 'checkbox',
+					'default'		=> 'checked'
 				)
 			)
 		);
