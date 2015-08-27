@@ -1,0 +1,8 @@
+node_modules
+release
+vendor
+phpunit.xml
+.idea
+*.css
+*.map
+assets/js/*.js

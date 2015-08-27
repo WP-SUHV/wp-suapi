@@ -1,0 +1,23 @@
+{
+    "name": "wp-suapi",
+    "description": "Wordpress plugin to connect with the swiss unihockey API v2.",
+    "version": "0.1.0",
+    "type": "wordpress-plugin",
+    "keywords": [],
+    "homepage": "https://github.com/WP-SUHV/wp-suapi",
+    "authors": [
+        {
+            "name": "Philipp Meier",
+            "email": "philipp.meier@fbriders.ch",
+            "homepage": "https://github.com/meip",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "tgmpa/tgm-plugin-activation": "^2.5"
+    },
+    "require-dev": {
+    }
+}
