@@ -1,28 +1,30 @@
 {
-    "name": "wp-suapi",
-    "description": "Wordpress plugin to connect with the swiss unihockey API v2.",
-    "version": "0.1.0",
-    "type": "wordpress-plugin",
-    "keywords": [],
-    "homepage": "https://github.com/WP-SUHV/wp-suapi",
-    "authors": [
-        {
-            "name": "Philipp Meier",
-            "email": "philipp.meier@fbriders.ch",
-            "homepage": "https://github.com/meip",
-            "role": "Developer"
-        }
-    ],
-    "autoload": {
-        "psr-4": { "WP_SUAPI\\": "includes" }
-    },
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=5.4",
-        "nategood/httpful": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.8.*",
-        "10up/wp_mock": "dev-master"
+  "name": "wp-suapi",
+  "description": "Wordpress plugin to connect with the swiss unihockey API v2.",
+  "version": "0.1.0",
+  "type": "wordpress-plugin",
+  "keywords": [],
+  "homepage": "https://github.com/WP-SUHV/wp-suapi",
+  "authors": [
+    {
+      "name": "Philipp Meier",
+      "email": "philipp.meier@fbriders.ch",
+      "homepage": "https://github.com/meip",
+      "role": "Developer"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WP_SUAPI\\": "includes"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.4",
+    "nategood/httpful": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8.*",
+    "10up/wp_mock": "dev-master"
+  }
 }

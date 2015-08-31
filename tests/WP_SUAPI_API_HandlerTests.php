@@ -3,7 +3,8 @@
 use WP_SUAPI\WP_SUAPI_API_Handler;
 use WP_SUAPI\Object\Club;
 
-class WP_SUAPI_API_HandlerTests extends PHPUnit_Framework_TestCase {
+class WP_SUAPI_API_HandlerTests extends PHPUnit_Framework_TestCase
+{
 
     /**
      * Api handler
@@ -34,12 +35,9 @@ class WP_SUAPI_API_HandlerTests extends PHPUnit_Framework_TestCase {
     /**
      * Init WP_Mock and API handler
      */
-    public function setUp() {
-        \WP_Mock::setUp();
+    public function setUp()
+    {
+        \WP_Mock::setUp(); // Needed for define('ABSPATH..
         self::$apiHandler = new WP_SUAPI_API_Handler("https://api-v2.swissunihockey.ch/api/", "", "");
-    }
-
-    public function tearDown() {
-        \WP_Mock::tearDown();
     }
 }

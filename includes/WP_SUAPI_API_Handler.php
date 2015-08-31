@@ -8,7 +8,9 @@ require_once('object/WP_SUAPI_API_Object.php');
 use WP_SUAPI\Object\Club;
 use WP_SUAPI\Object\Team;
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 define('WP_SUAPI_ENDPOINT_CLUBS', 'clubs');
 define('WP_SUAPI_ENDPOINT_TEAMS', 'teams');
@@ -61,6 +63,7 @@ class WP_SUAPI_API_Handler
         $map = function ($item) {
             return new Club($item->set_in_context->club_id, $item->text);
         };
+
         return array_map($map, $response->body->entries);
     }
 
@@ -83,6 +86,7 @@ class WP_SUAPI_API_Handler
         $map = function ($item) {
             return new Team($item->set_in_context->team_id, $item->text);
         };
+
         return array_map($map, $response->body->entries);
     }
 
@@ -105,7 +109,8 @@ class WP_SUAPI_API_Handler
     /**
      * @return composite uri to query the API
      */
-    protected function getApiUri() {
+    protected function getApiUri()
+    {
         return $this->uri;
     }
 
