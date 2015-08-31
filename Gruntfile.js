@@ -170,7 +170,18 @@ module.exports = function( grunt ){
 					'readme.md': 'readme.txt'
 				}
 			}
-		}
+		},
+		phpunit: {
+			classes: {
+				dir: 'tests/'
+			},
+			options: {
+				bin: 'vendor/bin/phpunit',
+				bootstrap: 'bootstrap.php',
+				colors: true,
+				testSuffix: 'Tests.php'
+			}
+		},
 	} );
 
 	// Load tasks
@@ -185,6 +196,8 @@ module.exports = function( grunt ){
 	grunt.registerTask( 'default', ['css', 'js', 'wp_readme_to_markdown' ] );
 
 	grunt.registerTask( 'build', ['default', 'clean', 'copy', 'compress'] );
+
+	grunt.registerTask( 'test', ['phpunit'] );
 
 	grunt.util.linefeed = '\n';
 
