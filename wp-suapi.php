@@ -22,7 +22,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 require __DIR__ . '/vendor/autoload.php';
-require_once( 'includes/dependencies.php' );
 // Load plugin class files
 require_once( 'includes/class-wp-suapi.php' );
 require_once( 'includes/class-wp-suapi-settings.php' );
