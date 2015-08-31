@@ -56,7 +56,10 @@ class WP_SUAPI_API_Handler
      */
     public function getClubs()
     {
-        $response = Request::get($this->getApiUri() . WP_SUAPI_ENDPOINT_CLUBS)->send();
+        $response = Request::get(
+            $this->getApiUri()
+            . WP_SUAPI_ENDPOINT_CLUBS
+        )->send();
         if ($response->code !== 200) {
             throw new WP_SUAPI_Api_Exception($response->raw_body);
         }
@@ -88,6 +91,22 @@ class WP_SUAPI_API_Handler
         };
 
         return array_map($map, $response->body->entries);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isConnected()
+    {
+        $response = Request::get(
+            $this->getApiUri()
+            . WP_SUAPI_ENDPOINT_CLUBS
+        )->send();
+        if ($response->code === 200) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

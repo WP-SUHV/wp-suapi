@@ -16,6 +16,14 @@ class WP_SUAPI_API_HandlerTests extends PHPUnit_Framework_TestCase
      * Test all clubs query from api handler
      * @return void
      */
+    public function testIsConnected()
+    {
+        $this->assertTrue(self::$apiHandler->isConnected());
+    }
+    /**
+     * Test all clubs query from api handler
+     * @return void
+     */
     public function testGetClubs()
     {
         $allClubs = self::$apiHandler->getClubs();

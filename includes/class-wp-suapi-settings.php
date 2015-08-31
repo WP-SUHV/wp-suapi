@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use WP_SUAPI\WP_SUAPI_API_Handler;
+
 class WP_SUAPI_Settings
 {
 
@@ -43,7 +45,7 @@ class WP_SUAPI_Settings
     {
         $this->parent = $parent;
 
-        $this->base = 'wpt_';
+        $this->base = "wp-suapi_";
 
         // Initialise settings
         add_action('init', array($this, 'init_settings'), 11);
@@ -73,7 +75,7 @@ class WP_SUAPI_Settings
      */
     public function add_menu_item()
     {
-        $page = add_options_page(__('Plugin Settings', 'wp-suapi'), __('Plugin Settings', 'wp-suapi'), 'manage_options', $this->parent->_token . '_settings', array($this, 'settings_page'));
+        $page = add_options_page(__('SUAPI Settings', 'wp-suapi'), __('SUAPI Settings', 'wp-suapi'), 'manage_options', $this->parent->_token . '_settings', array($this, 'settings_page'));
         add_action('admin_print_styles-' . $page, array($this, 'settings_assets'));
     }
 
@@ -83,17 +85,11 @@ class WP_SUAPI_Settings
      */
     public function settings_assets()
     {
-
-        // We're including the farbtastic script & styles here because they're needed for the colour picker
-        // If you're not including a colour picker field then you can leave these calls out as well as the farbtastic dependency for the wpt-admin-js script below
-        wp_enqueue_style('farbtastic');
-        wp_enqueue_script('farbtastic');
-
         // We're including the WP media scripts here because they're needed for the image upload field
         // If you're not including an image upload then you can leave this function call out
         wp_enqueue_media();
 
-        wp_register_script($this->parent->_token . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array('farbtastic', 'jquery'), '1.0.0');
+        wp_register_script($this->parent->_token . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array('jquery'), '1.0.0');
         wp_enqueue_script($this->parent->_token . '-settings-js');
     }
 
@@ -117,13 +113,12 @@ class WP_SUAPI_Settings
      */
     private function settings_fields()
     {
-
         $settings['apiconnection'] = array(
             'title' => __('API Connection', 'wp-suapi'),
             'description' => __('swiss unihockey API Connection', 'wp-suapi'),
             'fields' => array(
                 array(
-                    'id' => 'suapi-api-url',
+                    'id' => 'api-url',
                     'label' => __('API URL', 'wp-suapi'),
                     'description' => __('URL to the swiss unihockey API.', 'wp-suapi'),
                     'type' => 'text',
@@ -131,22 +126,63 @@ class WP_SUAPI_Settings
                     'placeholder' => __('https://api-v2.swissunihockey.ch/api', 'wp-suapi')
                 ),
                 array(
-                    'id' => 'suapi-api-key',
+                    'id' => 'api-key',
                     'label' => __('API Key', 'wp-suapi'),
                     'description' => __('Key to the API', 'wp-suapi'),
                     'type' => 'text',
                     'default' => '',
                     'placeholder' => __('Your personal key', 'wp-suapi')
+                ),
+                array(
+                    'id' => 'api-version',
+                    'label' => __('API Version', 'wp-suapi'),
+                    'description' => __('Select the API Version', 'wp-suapi'),
+                    'type' => 'select',
+                    'options' => array('v1' => 'V1', 'v2' => 'V2'),
+                    'default' => 'v2'
                 )
             )
         );
+
+        if ($this->checkApiConnectionSetup()) {
+            $apiHandler = new WP_SUAPI_API_Handler(get_option("wp-suapi_api-url"), get_option("wp-suapi_api-key"), get_option("wp-suapi_api-version"));
+            if ($apiHandler->isConnected()) {
+                $allClubs = array_reduce(
+                    $apiHandler->getClubs(),
+                    function(&$result, $item){
+                        $result[$item->getClubId()] = $item->getClubName();
+                        return $result;
+                    },
+                    array()
+                );
+                $settings['apiconnection']['fields'][] =
+                    array(
+                        'id' => 'api-club',
+                        'label' => __('swiss unihockey Club', 'wp-suapi'),
+                        'description' => __('Select the swiss unihockey Club', 'wp-suapi'),
+                        'type' => 'select',
+                        'options' => $allClubs,
+                        'default' => ''
+                    );
+            } else {
+                $settings['apiconnection']['fields'][] =
+                    array(
+                        'id' => 'api-club',
+                        'label' => __('swiss unihockey Club', 'wp-suapi'),
+                        'description' => __('Select the swiss unihockey Club', 'wp-suapi'),
+                        'type' => 'select',
+                        'options' => array('noConnection' => 'No Connection'),
+                        'default' => 'noConnection'
+                    );
+            }
+        }
 
         $settings['extra'] = array(
             'title' => __('Extra', 'wp-suapi'),
             'description' => __('WP SUAPI Plugin settings', 'wp-suapi'),
             'fields' => array(
                 array(
-                    'id' => 'suapi-extra-usecache',
+                    'id' => 'extra-usecache',
                     'label' => __('Use cache', 'wp-suapi'),
                     'description' => __('Use a 12 hours cache for API results', 'wp-suapi'),
                     'type' => 'checkbox',
@@ -225,7 +261,7 @@ class WP_SUAPI_Settings
 
         // Build page HTML
         $html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
-        $html .= '<h2>' . __('Plugin Settings', 'wp-suapi') . '</h2>' . "\n";
+        $html .= '<h2>' . __('SUAPI Settings', 'wp-suapi') . '</h2>' . "\n";
 
         $tab = '';
         if (isset($_GET['tab']) && $_GET['tab']) {
@@ -321,6 +357,11 @@ class WP_SUAPI_Settings
     public function __wakeup()
     {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
-    } // End __wakeup()
+    }
+
+    private function checkApiConnectionSetup()
+    {
+        return !empty(get_option("wp-suapi_api-url")) && !empty(get_option("wp-suapi_api-version"));
+    }
 
 }

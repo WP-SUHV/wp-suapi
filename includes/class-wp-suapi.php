@@ -88,7 +88,7 @@ class WP_SUAPI
     public function __construct($file = '', $version = '1.0.0')
     {
         $this->_version = $version;
-        $this->_token = 'wp_suapi';
+        $this->_token = 'wp-suapi';
 
         // Load plugin environment variables
         $this->file = $file;

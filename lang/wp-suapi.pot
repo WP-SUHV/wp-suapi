@@ -227,7 +227,7 @@ msgstr ""
 
 #: includes/class-wp-suapi-settings.php:70
 #: includes/class-wp-suapi-settings.php:405
-msgid "Plugin Settings"
+msgid "SUAPI Settings"
 msgstr ""
 
 #: includes/class-wp-suapi-settings.php:99
