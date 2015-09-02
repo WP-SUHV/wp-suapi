@@ -6,9 +6,11 @@ use WP_SUAPI\Exception\WP_SUAPI_Api_Exception;
 
 require_once('object/WP_SUAPI_API_Object.php');
 use WP_SUAPI\Object\Club;
-use WP_SUAPI\Object\Location;
-use WP_SUAPI\Object\Team;
 use WP_SUAPI\Object\Game;
+use WP_SUAPI\Object\LeagueAndGroup;
+use WP_SUAPI\Object\Location;
+use WP_SUAPI\Object\Ranking;
+use WP_SUAPI\Object\Team;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -17,6 +19,7 @@ if (!defined('ABSPATH')) {
 define('WP_SUAPI_ENDPOINT_CLUBS', 'clubs');
 define('WP_SUAPI_ENDPOINT_TEAMS', 'teams');
 define('WP_SUAPI_ENDPOINT_GAMES', 'games');
+define('WP_SUAPI_ENDPOINT_RANKINGS', 'rankings');
 
 class WP_SUAPI_API_Handler
 {
@@ -131,6 +134,46 @@ class WP_SUAPI_API_Handler
     }
 
     /**
+     * Getranking for team
+     * @return Array(WP_SUAPI\Object\Ranking)
+     */
+    public function getRankingForTeam($team)
+    {
+        $team->setLeague($this->getLeagueByTeam($team));
+        $response = Request::get(
+            $this->getApiUri()
+            . WP_SUAPI_ENDPOINT_RANKINGS
+            . "?season=" . $this->yearForQuery
+            . "&league=" . $team->getLeague()->getLeagueId()
+            . "&game_class=" . $team->getLeague()->getLeagueGameClassId()
+            . "&group=Gruppe+" . $team->getLeague()->getLeagueGroup()
+            . "&view=full"
+        )->send();
+        if ($response->code !== 200) {
+            throw new WP_SUAPI_Api_Exception($response->raw_body);
+        }
+
+        $cleanedRankingResults = array_filter($response->body->data->regions[0]->rows, function($item) {
+            return property_exists($item, 'data'); //Remove items used as separator
+        });
+        $rankings = array_map(function ($rankingInput) use ($team, $response) {
+            $ranking = new Ranking($team->getLeague(),
+                $rankingInput->data->rank,
+                $rankingInput->data->team->name,
+                $rankingInput->cells[2]->text[0],
+                $rankingInput->cells[3]->text[0],
+                $rankingInput->cells[4]->text[0],
+                $rankingInput->cells[5]->text[0],
+                $rankingInput->cells[6]->text[0],
+                $rankingInput->cells[7]->text[0],
+                $rankingInput->cells[8]->text[0]
+            );
+            return $ranking;
+        }, $cleanedRankingResults);
+        return $rankings;
+    }
+
+    /**
      * @return boolean
      */
     public function isConnected()
@@ -170,4 +213,28 @@ class WP_SUAPI_API_Handler
         return $this->uri;
     }
 
+    public function getLeagueByTeam($team)
+    {
+        $response = Request::get(
+            $this->getApiUri()
+            . WP_SUAPI_ENDPOINT_GAMES
+            . "?season=" . $this->yearForQuery
+            . "&mode=team"
+            . "&team_id=" . $team->getTeamId()
+        )->send();
+        if ($response->code !== 200) {
+            throw new WP_SUAPI_Api_Exception($response->raw_body);
+        }
+        $leagueAndGroup = new LeagueAndGroup($team->getTeamName());
+        $leagueId = $response->body->data->tabs[0]->link->ids[1];
+        $gameClassId = $response->body->data->tabs[0]->link->ids[2];
+        $leagueAndGroup->setLeagueId($leagueId);
+        $leagueAndGroup->setLeagueGameClassId($gameClassId);
+        $parsedLeagueGroup = array();
+        if (preg_match("/.*Gr\.\s(\d*)/", $response->body->data->title, $parsedLeagueGroup)) {
+            $leagueGroup = $parsedLeagueGroup[1];
+            $leagueAndGroup->setLeagueGroup($leagueGroup);
+        }
+        return $leagueAndGroup;
+    }
 }
