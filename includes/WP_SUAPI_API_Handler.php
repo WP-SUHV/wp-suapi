@@ -69,11 +69,10 @@ class WP_SUAPI_API_Handler
         if ($response->code !== 200) {
             throw new WP_SUAPI_Api_Exception($response->raw_body);
         }
-        $map = function ($item) {
+        
+        return array_map(function ($item) {
             return new Club($item->set_in_context->club_id, $item->text);
-        };
-
-        return array_map($map, $response->body->entries);
+        }, $response->body->entries);
     }
 
     /**
@@ -92,11 +91,10 @@ class WP_SUAPI_API_Handler
         if ($response->code !== 200) {
             throw new WP_SUAPI_Api_Exception($response->raw_body);
         }
-        $map = function ($item) {
-            return new Team($item->set_in_context->team_id, $item->text);
-        };
 
-        return array_map($map, $response->body->entries);
+        return array_map(function ($item) {
+            return new Team($item->set_in_context->team_id, $item->text);
+        }, $response->body->entries);
     }
 
     /**
@@ -117,7 +115,8 @@ class WP_SUAPI_API_Handler
         if ($response->code !== 200) {
             throw new WP_SUAPI_Api_Exception($response->raw_body);
         }
-        $map = function ($item) {
+
+        return array_map(function ($item) {
             $id = $item->link->ids[0];
             $date = $item->cells[0]->text[0];
             $time = $item->cells[0]->text[1];
@@ -128,9 +127,7 @@ class WP_SUAPI_API_Handler
             $teamAway = $item->cells[3]->text[0];
             $result = $item->cells[4]->text[0];
             return new Game($id, $date, $time, $location, $teamHome, $teamAway);
-        };
-
-        return array_map($map, $response->body->data->regions[0]->rows);
+        }, $response->body->data->regions[0]->rows);
     }
 
     /**
