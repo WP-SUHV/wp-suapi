@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('WP_SUAPI_DEBUG', true);
+
 class WP_SUAPI
 {
 
@@ -96,7 +98,7 @@ class WP_SUAPI
         $this->assets_dir = trailingslashit($this->dir) . 'assets';
         $this->assets_url = esc_url(trailingslashit(plugins_url('/assets/', $this->file)));
 
-        $this->script_suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+        $this->script_suffix = defined('WP_SUAPI_DEBUG') && WP_SUAPI_DEBUG ? '' : '.min';
 
         register_activation_hook($this->file, array($this, 'install'));
 
@@ -170,7 +172,7 @@ class WP_SUAPI
      */
     public function enqueue_styles()
     {
-        wp_register_style($this->_token . '-frontend', esc_url($this->assets_url) . 'css/' . $this->_token . '-frontend.css', array(), $this->_version);
+        wp_register_style($this->_token . '-frontend', esc_url($this->assets_url) . 'css/' . $this->_token . '-frontend' . $this->script_suffix . '.css', array(), $this->_version);
         wp_enqueue_style($this->_token . '-frontend');
     } // End enqueue_styles ()
 
@@ -182,7 +184,11 @@ class WP_SUAPI
      */
     public function enqueue_scripts()
     {
-        wp_register_script($this->_token . '-frontend', esc_url($this->assets_url) . 'js/' . $this->_token . '-frontend' . $this->script_suffix . '.min.js', array('jquery'), $this->_version);
+        if (defined('WP_SUAPI_DEBUG') && WP_SUAPI_DEBUG) {
+            wp_register_script($this->_token . '-frontend', esc_url($this->assets_url) . 'js/src/' . $this->_token . '-frontend' . $this->script_suffix . '.js', array('jquery'), $this->_version);
+        } else {
+            wp_register_script($this->_token . '-frontend', esc_url($this->assets_url) . 'js/' . $this->_token . '-frontend' . $this->script_suffix . '.js', array('jquery'), $this->_version);
+        }
         wp_enqueue_script($this->_token . '-frontend');
     } // End enqueue_scripts ()
 
@@ -194,7 +200,7 @@ class WP_SUAPI
      */
     public function admin_enqueue_styles($hook = '')
     {
-        wp_register_style($this->_token . '-admin', esc_url($this->assets_url) . 'css/' . $this->_token . '-admin.min.css', array(), $this->_version);
+        wp_register_style($this->_token . '-admin', esc_url($this->assets_url) . 'css/' . $this->_token . '-admin' . $this->script_suffix . '.css', array(), $this->_version);
         wp_enqueue_style($this->_token . '-admin');
     } // End admin_enqueue_styles ()
 
@@ -206,7 +212,11 @@ class WP_SUAPI
      */
     public function admin_enqueue_scripts($hook = '')
     {
-        wp_register_script($this->_token . '-admin', esc_url($this->assets_url) . 'js/' . $this->_token . '-admin' . $this->script_suffix . '.min.js', array('jquery'), $this->_version);
+        if (defined('WP_SUAPI_DEBUG') && WP_SUAPI_DEBUG) {
+            wp_register_script($this->_token . '-admin', esc_url($this->assets_url) . 'js/src/' . $this->_token . '-admin' . $this->script_suffix . '.js', array('jquery'), $this->_version);
+        } else {
+            wp_register_script($this->_token . '-admin', esc_url($this->assets_url) . 'js/' . $this->_token . '-admin' . $this->script_suffix . '.js', array('jquery'), $this->_version);
+        }
         wp_enqueue_script($this->_token . '-admin');
     } // End admin_enqueue_scripts ()
 
