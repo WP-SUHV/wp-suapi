@@ -19,17 +19,19 @@
  * @since 1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (!defined('ABSPATH')) exit;
+
+// Must be set before the cuztom autoload
+define('CUZTOM_URL', '/../app/plugins/wp-suapi/vendor/gizburdt/cuztom');
 
 require __DIR__ . '/vendor/autoload.php';
 // Load plugin class files
-require_once( 'includes/class-wp-suapi.php' );
-require_once( 'includes/class-wp-suapi-settings.php' );
+require_once('includes/class-wp-suapi-settings.php');
+require_once('includes/class-wp-suapi.php');
 
 // Load plugin libraries
-require_once( 'includes/lib/class-wp-suapi-admin-api.php' );
-require_once( 'includes/lib/class-wp-suapi-post-type.php' );
-require_once( 'includes/lib/class-wp-suapi-taxonomy.php' );
+require_once('includes/lib/class-wp-suapi-admin-api.php');
+require_once('includes/lib/class-wp-suapi-taxonomy.php');
 
 /**
  * Returns the main instance of WP_SUAPI to prevent the need to use globals.
@@ -37,14 +39,15 @@ require_once( 'includes/lib/class-wp-suapi-taxonomy.php' );
  * @since  1.0.0
  * @return object WP_SUAPI
  */
-function WP_SUAPI () {
-	$instance = WP_SUAPI::instance( __FILE__, '1.0.0' );
+function WP_SUAPI()
+{
+    $instance = WP_SUAPI::instance(__FILE__, '1.0.0');
 
-	if ( is_null( $instance->settings ) ) {
-		$instance->settings = WP_SUAPI_Settings::instance( $instance );
-	}
+    if (is_null($instance->settings)) {
+        $instance->settings = WP_SUAPI_Settings::instance($instance);
+    }
 
-	return $instance;
+    return $instance;
 }
 
 WP_SUAPI();

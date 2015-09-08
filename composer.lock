@@ -4,8 +4,41 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e9af14cf2c9ebdc2a2094ab3139a55e4",
+    "hash": "0b721ac985ad97168306663db53350c7",
     "packages": [
+        {
+            "name": "gizburdt/cuztom",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gizburdt/cuztom.git",
+                "reference": "aa188067038fb80ef5fdeccf02ae16db9d8706ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gizburdt/cuztom/zipball/aa188067038fb80ef5fdeccf02ae16db9d8706ac",
+                "reference": "aa188067038fb80ef5fdeccf02ae16db9d8706ac",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "cuztom.php"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Gizburdt",
+                    "email": "lol@gizburdt.com"
+                }
+            ],
+            "description": "Wordpress Cuztom Helper. Easy meta data.",
+            "support": {
+                "source": "https://github.com/gizburdt/cuztom/tree/2.9.17",
+                "issues": "https://github.com/gizburdt/cuztom/issues"
+            },
+            "time": "2015-08-23 19:07:38"
+        },
         {
             "name": "nategood/httpful",
             "version": "dev-master",
@@ -417,16 +450,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "dev-master",
+            "version": "2.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "751653e81e3fcbddbe026f36e6e16fafd0a19f46"
+                "reference": "ab2283bf4a836d7f2ec5f33c15d6802d9f4cb512"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/751653e81e3fcbddbe026f36e6e16fafd0a19f46",
-                "reference": "751653e81e3fcbddbe026f36e6e16fafd0a19f46",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ab2283bf4a836d7f2ec5f33c15d6802d9f4cb512",
+                "reference": "ab2283bf4a836d7f2ec5f33c15d6802d9f4cb512",
                 "shasum": ""
             },
             "require": {
@@ -475,7 +508,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-08-17 07:51:01"
+            "time": "2015-09-01 12:25:27"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -661,12 +694,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b291d680bd7d76ce437998eaaff71510340d93fc"
+                "reference": "473776571bfcdcf416faca4d31f52c4e5740a9c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b291d680bd7d76ce437998eaaff71510340d93fc",
-                "reference": "b291d680bd7d76ce437998eaaff71510340d93fc",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/473776571bfcdcf416faca4d31f52c4e5740a9c2",
+                "reference": "473776571bfcdcf416faca4d31f52c4e5740a9c2",
                 "shasum": ""
             },
             "require": {
@@ -725,7 +758,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-08-30 14:30:39"
+            "time": "2015-09-05 08:36:58"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1208,6 +1241,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "gizburdt/cuztom": 20,
         "10up/wp_mock": 20
     },
     "prefer-stable": false,

@@ -57,6 +57,15 @@ class WP_SUAPI_API_Handler
     }
 
     /**
+     * Uses get_options and initialize API_HANDLER
+     * @return WP_SUAPI_API_Handler
+     */
+    public static function GET_INITIALIZED_API_HANDLER()
+    {
+        return new WP_SUAPI_API_Handler(get_option("wp-suapi_api-url"), get_option("wp-suapi_api-key"), get_option("wp-suapi_api-version"));
+    }
+
+    /**
      * Get all clubs
      * @return Array(WP_SUAPI\Object\Club)
      */
@@ -69,7 +78,7 @@ class WP_SUAPI_API_Handler
         if ($response->code !== 200) {
             throw new WP_SUAPI_Api_Exception($response->raw_body);
         }
-        
+
         return array_map(function ($item) {
             return new Club($item->set_in_context->club_id, $item->text);
         }, $response->body->entries);
@@ -150,7 +159,7 @@ class WP_SUAPI_API_Handler
             throw new WP_SUAPI_Api_Exception($response->raw_body);
         }
 
-        $cleanedRankingResults = array_filter($response->body->data->regions[0]->rows, function($item) {
+        $cleanedRankingResults = array_filter($response->body->data->regions[0]->rows, function ($item) {
             return property_exists($item, 'data'); //Remove items used as separator
         });
         $rankings = array_map(function ($rankingInput) use ($team, $response) {

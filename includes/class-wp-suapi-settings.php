@@ -149,7 +149,7 @@ class WP_SUAPI_Settings
         );
 
         if ($this->checkApiConnectionSetup()) {
-            $apiHandler = new WP_SUAPI_API_Handler(get_option("wp-suapi_api-url"), get_option("wp-suapi_api-key"), get_option("wp-suapi_api-version"));
+            $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
             if ($apiHandler->isConnected()) {
                 $allClubs = array_reduce(
                     $apiHandler->getClubs(),

@@ -3,6 +3,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+use WP_SUAPI\WP_SUAPI_Post_Types;
 
 define('WP_SUAPI_DEBUG', true);
 
@@ -82,6 +83,12 @@ class WP_SUAPI
     public $script_suffix;
 
     /**
+     * Holds all post types objects
+     * @var WP_SUAPI_PostTypes
+     */
+    public $post_types;
+
+    /**
      * Constructor function.
      * @access  public
      * @since   1.0.0
@@ -118,50 +125,15 @@ class WP_SUAPI
         // Handle localisation
         $this->load_plugin_textdomain();
         add_action('init', array($this, 'load_localisation'), 0);
+        add_action('init', array($this, 'register_cpt'), 0);
     } // End __construct ()
 
     /**
-     * Wrapper function to register a new post type
-     *
-     * @param  string $post_type Post type name
-     * @param  string $plural Post type item plural name
-     * @param  string $single Post type item single name
-     * @param  string $description Description of post type
-     *
-     * @return object              Post type class object
+     * Loads CPT
      */
-    public function register_post_type($post_type = '', $plural = '', $single = '', $description = '', $options = array())
+    public function register_cpt()
     {
-
-        if (!$post_type || !$plural || !$single) {
-            return;
-        }
-
-        $post_type = new WP_SUAPI_Post_Type($post_type, $plural, $single, $description, $options);
-
-        return $post_type;
-    }
-
-    /**
-     * Wrapper function to register a new taxonomy
-     *
-     * @param  string $taxonomy Taxonomy name
-     * @param  string $plural Taxonomy single name
-     * @param  string $single Taxonomy plural name
-     * @param  array $post_types Post types to which this taxonomy applies
-     *
-     * @return object             Taxonomy class object
-     */
-    public function register_taxonomy($taxonomy = '', $plural = '', $single = '', $post_types = array(), $taxonomy_args = array())
-    {
-
-        if (!$taxonomy || !$plural || !$single) {
-            return;
-        }
-
-        $taxonomy = new WP_SUAPI_Taxonomy($taxonomy, $plural, $single, $post_types, $taxonomy_args);
-
-        return $taxonomy;
+        $this->post_types = new WP_SUAPI_Post_Types();
     }
 
     /**

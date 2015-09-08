@@ -13,18 +13,29 @@
       "role": "Developer"
     }
   ],
-  "autoload": {
-    "psr-4": {
-      "WP_SUAPI\\": "includes"
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/gizburdt/cuztom"
     }
-  },
+  ],
   "minimum-stability": "dev",
   "require": {
     "php": ">=5.4",
-    "nategood/httpful": "*"
+    "nategood/httpful": "*",
+    "gizburdt/cuztom": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*",
     "10up/wp_mock": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "WP_SUAPI\\": "includes"
+    },
+    "classmap": [
+      "vendor/gizburdt/cuztom/cuztom.php",
+      "vendor/gizburdt/cuztom/classes"
+    ]
   }
 }
