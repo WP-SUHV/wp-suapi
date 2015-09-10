@@ -16,7 +16,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/gizburdt/cuztom"
+      "url": "https://github.com/wp-suhv/cuztom"
     }
   ],
   "minimum-stability": "dev",

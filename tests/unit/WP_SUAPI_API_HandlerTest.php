@@ -5,7 +5,7 @@ use WP_SUAPI\Object\Club;
 use WP_SUAPI\Object\Team;
 use WP_SUAPI\Object\LeagueAndGroup;
 
-class WP_SUAPI_API_HandlerTests extends PHPUnit_Framework_TestCase
+class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
 {
 
     /**

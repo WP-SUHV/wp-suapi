@@ -4,28 +4,23 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0b721ac985ad97168306663db53350c7",
+    "hash": "5871c9e04a9054aedd88b7e44f5b1404",
     "packages": [
         {
             "name": "gizburdt/cuztom",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gizburdt/cuztom.git",
-                "reference": "aa188067038fb80ef5fdeccf02ae16db9d8706ac"
+                "url": "https://github.com/WP-SUHV/cuztom.git",
+                "reference": "30b32cf162826990262fab818b8d17c68a462fb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gizburdt/cuztom/zipball/aa188067038fb80ef5fdeccf02ae16db9d8706ac",
-                "reference": "aa188067038fb80ef5fdeccf02ae16db9d8706ac",
+                "url": "https://api.github.com/repos/WP-SUHV/cuztom/zipball/30b32cf162826990262fab818b8d17c68a462fb5",
+                "reference": "30b32cf162826990262fab818b8d17c68a462fb5",
                 "shasum": ""
             },
             "type": "library",
-            "autoload": {
-                "files": [
-                    "cuztom.php"
-                ]
-            },
             "authors": [
                 {
                     "name": "Gizburdt",
@@ -34,10 +29,9 @@
             ],
             "description": "Wordpress Cuztom Helper. Easy meta data.",
             "support": {
-                "source": "https://github.com/gizburdt/cuztom/tree/2.9.17",
-                "issues": "https://github.com/gizburdt/cuztom/issues"
+                "source": "https://github.com/WP-SUHV/cuztom/tree/master"
             },
-            "time": "2015-08-23 19:07:38"
+            "time": "2015-09-10 19:22:36"
         },
         {
             "name": "nategood/httpful",

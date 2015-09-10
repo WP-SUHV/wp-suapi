@@ -1,6 +1,6 @@
 <?php
 
-class WP_SUAPI_Tests extends PHPUnit_Framework_TestCase {
+class WP_SUAPI_Test extends PHPUnit_Framework_TestCase {
 
     /**
      * Init WP_Mock and API handler
