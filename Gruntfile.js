@@ -139,7 +139,6 @@ module.exports = function( grunt ){
 						'!<%= dirs.css %>/sass/**',
 						'!<%= dirs.js %>/src/**',
 						'!images/src/**',
-						'!bootstrap.php',
 						'!bower.json',
 						'!composer.json',
 						'!composer.lock',
