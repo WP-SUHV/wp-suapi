@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WP-SUHV/cuztom.git",
-                "reference": "30b32cf162826990262fab818b8d17c68a462fb5"
+                "reference": "08096bbb0c156abbfc97f2856f1da74457ba47f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WP-SUHV/cuztom/zipball/30b32cf162826990262fab818b8d17c68a462fb5",
-                "reference": "30b32cf162826990262fab818b8d17c68a462fb5",
+                "url": "https://api.github.com/repos/WP-SUHV/cuztom/zipball/08096bbb0c156abbfc97f2856f1da74457ba47f0",
+                "reference": "08096bbb0c156abbfc97f2856f1da74457ba47f0",
                 "shasum": ""
             },
             "type": "library",
@@ -31,7 +31,7 @@
             "support": {
                 "source": "https://github.com/WP-SUHV/cuztom/tree/master"
             },
-            "time": "2015-09-10 19:22:36"
+            "time": "2015-09-15 19:16:39"
         },
         {
             "name": "guzzlehttp/guzzle",

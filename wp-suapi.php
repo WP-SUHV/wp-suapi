@@ -22,7 +22,6 @@
 if (!defined('ABSPATH')) exit;
 
 // Must be set before the cuztom autoload
-define('CUZTOM_URL', '/../app/plugins/wp-suapi/vendor/gizburdt/cuztom');
 
 define('WP_SUAPI_DIR', dirname(__FILE__));
 require __DIR__ . '/vendor/autoload.php';
