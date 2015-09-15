@@ -22,7 +22,7 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=5.4",
-    "nategood/httpful": "*",
+    "guzzlehttp/guzzle": "~6.0",
     "gizburdt/cuztom": "dev-master"
   },
   "require-dev": {

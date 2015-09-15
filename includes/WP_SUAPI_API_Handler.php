@@ -1,10 +1,10 @@
 <?php
 namespace WP_SUAPI;
 
-use Httpful\Request;
-use WP_SUAPI\Exception\WP_SUAPI_Api_Exception;
-
 require_once('object/WP_SUAPI_API_Object.php');
+
+use WP_SUAPI\Exception\WP_SUAPI_Api_Exception;
+use GuzzleHttp\Client;
 use WP_SUAPI\Object\Club;
 use WP_SUAPI\Object\Game;
 use WP_SUAPI\Object\LeagueAndGroup;
@@ -48,13 +48,26 @@ class WP_SUAPI_API_Handler
    */
   private $yearForQuery;
 
+  /**
+   * HTTP-Client
+   * @var GuzzleHttp\Client
+   */
+  private $guzzle;
+
   public function __construct($uri, $key, $apiVersion)
   {
     $this->uri = $uri;
     $this->key = $key;
     $this->apiVersion = $apiVersion;
     $this->yearForQuery = date("Y");
+    $this->guzzle = new Client([
+      'base_uri' => $this->getApiUri()
+      , 'timeout' => 15.0
+      // , 'debug' => true
+    ]);
+
   }
+
 
   /**
    * Uses get_options and initialize API_HANDLER
@@ -71,17 +84,13 @@ class WP_SUAPI_API_Handler
    */
   public function getClubs()
   {
-    $response = Request::get(
-      $this->getApiUri()
-      . WP_SUAPI_ENDPOINT_CLUBS
-    )->send();
-    if ($response->code !== 200) {
-      throw new WP_SUAPI_Api_Exception($response->raw_body);
+    $response = $this->guzzle->get(WP_SUAPI_ENDPOINT_CLUBS);
+    if ($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
     }
-
     return array_map(function ($item) {
       return new Club($item->set_in_context->club_id, $item->text);
-    }, $response->body->entries);
+    }, json_decode($response->getBody())->entries);
   }
 
   /**
@@ -90,20 +99,17 @@ class WP_SUAPI_API_Handler
    */
   public function getTeamsForClub($club)
   {
-    $response = Request::get(
-      $this->getApiUri()
-      . WP_SUAPI_ENDPOINT_TEAMS
+    $response = $this->guzzle->get(
+      WP_SUAPI_ENDPOINT_TEAMS
       . "?season=" . $this->yearForQuery
       . "&mode=by_club"
-      . "&club_id=" . $club->getClubId()
-    )->send();
-    if ($response->code !== 200) {
-      throw new WP_SUAPI_Api_Exception($response->raw_body);
+      . "&club_id=" . $club->getClubId());
+    if ($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
     }
-
     return array_map(function ($item) {
       return new Team($item->set_in_context->team_id, $item->text);
-    }, $response->body->entries);
+    }, json_decode($response->getBody())->entries);
   }
 
   /**
@@ -112,17 +118,15 @@ class WP_SUAPI_API_Handler
    */
   public function getGamesForTeam($team)
   {
-    $response = Request::get(
-      $this->getApiUri()
-      . WP_SUAPI_ENDPOINT_GAMES
+    $response = $this->guzzle->get(
+      WP_SUAPI_ENDPOINT_GAMES
       . "?season=" . $this->yearForQuery
       . "&mode=team"
       . "&view=full"
       . "&order=natural"
-      . "&team_id=" . $team->getTeamId()
-    )->send();
-    if ($response->code !== 200) {
-      throw new WP_SUAPI_Api_Exception($response->raw_body);
+      . "&team_id=" . $team->getTeamId());
+    if ($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
     }
 
     return array_map(function ($item) {
@@ -136,7 +140,7 @@ class WP_SUAPI_API_Handler
       $teamAway = $item->cells[3]->text[0];
       $result = $item->cells[4]->text[0];
       return new Game($id, $date, $time, $location, $teamHome, $teamAway);
-    }, $response->body->data->regions[0]->rows);
+    }, json_decode($response->getBody())->data->regions[0]->rows);
   }
 
   /**
@@ -146,23 +150,21 @@ class WP_SUAPI_API_Handler
   public function getRankingForTeam($team)
   {
     $team->setLeague($this->getLeagueByTeam($team));
-    $response = Request::get(
-      $this->getApiUri()
-      . WP_SUAPI_ENDPOINT_RANKINGS
+    $response = $this->guzzle->get(
+      WP_SUAPI_ENDPOINT_RANKINGS
       . "?season=" . $this->yearForQuery
       . "&league=" . $team->getLeague()->getLeagueId()
       . "&game_class=" . $team->getLeague()->getLeagueGameClassId()
       . "&group=Gruppe+" . $team->getLeague()->getLeagueGroup()
-      . "&view=full"
-    )->send();
-    if ($response->code !== 200) {
-      throw new WP_SUAPI_Api_Exception($response->raw_body);
+      . "&view=full");
+    if ($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
     }
 
-    $cleanedRankingResults = array_filter($response->body->data->regions[0]->rows, function ($item) {
+    $cleanedRankingResults = array_filter(json_decode($response->getBody())->data->regions[0]->rows, function ($item) {
       return property_exists($item, 'data'); //Remove items used as separator
     });
-    $rankings = array_map(function ($rankingInput) use ($team, $response) {
+    $rankings = array_map(function ($rankingInput) use ($team) {
       $ranking = new Ranking($team->getLeague(),
         $rankingInput->data->rank,
         $rankingInput->data->team->name,
@@ -184,11 +186,8 @@ class WP_SUAPI_API_Handler
    */
   public function isConnected()
   {
-    $response = Request::get(
-      $this->getApiUri()
-      . WP_SUAPI_ENDPOINT_CLUBS
-    )->send();
-    if ($response->code === 200) {
+    $response = $this->guzzle->get(WP_SUAPI_ENDPOINT_CLUBS);
+    if ($response->getStatusCode() === 200) {
       return true;
     } else {
       return false;
@@ -221,23 +220,21 @@ class WP_SUAPI_API_Handler
 
   public function getLeagueByTeam($team)
   {
-    $response = Request::get(
-      $this->getApiUri()
-      . WP_SUAPI_ENDPOINT_GAMES
+    $response = $this->guzzle->get(
+      WP_SUAPI_ENDPOINT_GAMES
       . "?season=" . $this->yearForQuery
       . "&mode=team"
-      . "&team_id=" . $team->getTeamId()
-    )->send();
-    if ($response->code !== 200) {
-      throw new WP_SUAPI_Api_Exception($response->raw_body);
+      . "&team_id=" . $team->getTeamId());
+    if ($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
     }
     $leagueAndGroup = new LeagueAndGroup($team->getTeamName());
-    $leagueId = $response->body->data->tabs[0]->link->ids[1];
-    $gameClassId = $response->body->data->tabs[0]->link->ids[2];
+    $leagueId = json_decode($response->getBody())->data->tabs[0]->link->ids[1];
+    $gameClassId = json_decode($response->getBody())->data->tabs[0]->link->ids[2];
     $leagueAndGroup->setLeagueId($leagueId);
     $leagueAndGroup->setLeagueGameClassId($gameClassId);
     $parsedLeagueGroup = array();
-    if (preg_match("/.*Gr\.\s(\d*)/", $response->body->data->title, $parsedLeagueGroup)) {
+    if (preg_match("/.*Gr\.\s(\d*)/", json_decode($response->getBody())->data->title, $parsedLeagueGroup)) {
       $leagueGroup = $parsedLeagueGroup[1];
       $leagueAndGroup->setLeagueGroup($leagueGroup);
     }
