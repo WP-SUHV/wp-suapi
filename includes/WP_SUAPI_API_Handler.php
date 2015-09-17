@@ -63,6 +63,7 @@ class WP_SUAPI_API_Handler
     $this->guzzle = new Client([
       'base_uri' => $this->getApiUri()
       , 'timeout' => 15.0
+      , 'verify' => false // sherwoodch: workaround for self certificate problem
       // , 'debug' => true
     ]);
 
