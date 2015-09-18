@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) {
 }
 use WP_SUAPI\WP_SUAPI_Post_Types;
 
+include('lib/WP_SUAPI_Template_Tags.php');
+
 define('WP_SUAPI_DEBUG', true);
 
 class WP_SUAPI
@@ -126,6 +128,10 @@ class WP_SUAPI
     $this->load_plugin_textdomain();
     add_action('init', array($this, 'load_localisation'), 0);
     add_action('init', array($this, 'register_cpt'), 0);
+
+    //Register Filter for WP_Suapi Custom Posts
+    add_filter( 'the_content', array($this, 'wp_suapi_filter'));
+
   } // End __construct ()
 
   /**
@@ -134,6 +140,17 @@ class WP_SUAPI
   public function register_cpt()
   {
     $this->post_types = new WP_SUAPI_Post_Types();
+  }
+
+  /**
+   * Add WP_SUAPI specific content if post type is team
+   */
+  function wp_suapi_filter($content){
+    if((get_post_type(get_the_ID())) == 'team'){
+      // Ranking Table
+      $content .= getRankingTableOthers();
+    }
+    return $content;
   }
 
   /**
