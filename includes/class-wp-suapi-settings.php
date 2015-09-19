@@ -148,36 +148,40 @@ class WP_SUAPI_Settings
       )
     );
 
-    if ($this->checkApiConnectionSetup()) {
-      $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
-      if ($apiHandler->isConnected()) {
-        $allClubs = array_reduce(
-          $apiHandler->getClubs(),
-          function (&$result, $item) {
-            $result[$item->getClubId()] = $item->getClubName();
-            return $result;
-          },
-          array()
-        );
-        $settings['apiconnection']['fields'][] =
-          array(
-            'id' => 'api-club',
-            'label' => __('swiss unihockey Club', 'wp-suapi'),
-            'description' => __('Select the swiss unihockey Club', 'wp-suapi'),
-            'type' => 'select',
-            'options' => $allClubs,
-            'default' => ''
+    if ($this->check_api_connection_setup()) {
+      try {
+        $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+        if ($apiHandler->isConnected()) {
+          $allClubs = array_reduce(
+            $apiHandler->getClubs(),
+            function (&$result, $item) {
+              $result[$item->getClubId()] = $item->getClubName();
+              return $result;
+            },
+            array()
           );
-      } else {
-        $settings['apiconnection']['fields'][] =
-          array(
-            'id' => 'api-club',
-            'label' => __('swiss unihockey Club', 'wp-suapi'),
-            'description' => __('Select the swiss unihockey Club', 'wp-suapi'),
-            'type' => 'select',
-            'options' => array('noConnection' => 'No Connection'),
-            'default' => 'noConnection'
-          );
+          $settings['apiconnection']['fields'][] =
+            array(
+              'id' => 'api-club',
+              'label' => __('swiss unihockey Club', 'wp-suapi'),
+              'description' => __('Select the swiss unihockey Club', 'wp-suapi'),
+              'type' => 'select',
+              'options' => $allClubs,
+              'default' => ''
+            );
+        } else {
+          $settings['apiconnection']['fields'][] =
+            array(
+              'id' => 'api-club',
+              'label' => __('swiss unihockey Club', 'wp-suapi'),
+              'description' => __('Select the swiss unihockey Club', 'wp-suapi'),
+              'type' => 'select',
+              'options' => array('noConnection' => 'No Connection'),
+              'default' => 'noConnection'
+            );
+        }
+      } catch (\GuzzleHttp\Exception\RequestException $e) {
+        new Cuztom_Notice($this->_token . " RequestException: " . $e->getMessage() . " - " . $e->getResponse()->getReasonPhrase(), 'error');
       }
     }
 
@@ -363,7 +367,7 @@ class WP_SUAPI_Settings
     _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
   }
 
-  private function checkApiConnectionSetup()
+  private function check_api_connection_setup()
   {
     return !empty(get_option("wp-suapi_api-url")) && !empty(get_option("wp-suapi_api-version"));
   }

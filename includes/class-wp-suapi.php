@@ -5,8 +5,6 @@ if (!defined('ABSPATH')) {
 }
 use WP_SUAPI\WP_SUAPI_Post_Types;
 
-include('lib/WP_SUAPI_Template_Tags.php');
-
 define('WP_SUAPI_DEBUG', true);
 
 class WP_SUAPI
@@ -122,16 +120,15 @@ class WP_SUAPI
     // Load API for generic admin functions
     if (is_admin()) {
       $this->admin = new WP_SUAPI_Admin_API();
+      if (is_null($this->settings)) {
+        $this->settings = WP_SUAPI_Settings::instance($this);
+      }
     }
 
     // Handle localisation
     $this->load_plugin_textdomain();
     add_action('init', array($this, 'load_localisation'), 0);
     add_action('init', array($this, 'register_cpt'), 0);
-
-    //Register Filter for WP_Suapi Custom Posts
-    add_filter( 'the_content', array($this, 'wp_suapi_filter'));
-
   } // End __construct ()
 
   /**
@@ -139,18 +136,11 @@ class WP_SUAPI
    */
   public function register_cpt()
   {
-    $this->post_types = new WP_SUAPI_Post_Types();
-  }
-
-  /**
-   * Add WP_SUAPI specific content if post type is team
-   */
-  function wp_suapi_filter($content){
-    if((get_post_type(get_the_ID())) == 'team'){
-      // Ranking Table
-      $content .= getRankingTableOthers();
+    try {
+      $this->post_types = new WP_SUAPI_Post_Types();
+    } catch (\GuzzleHttp\Exception\RequestException $e) {
+      new Cuztom_Notice($this->_token . " RequestException: " . $e->getMessage() . " - " . $e->getResponse()->getReasonPhrase(), 'error');
     }
-    return $content;
   }
 
   /**
@@ -284,6 +274,7 @@ class WP_SUAPI
   public function install()
   {
     $this->_log_version_number();
+    $this->_set_default_values();
   } // End install ()
 
   /**
@@ -295,6 +286,27 @@ class WP_SUAPI
   private function _log_version_number()
   {
     update_option($this->_token . '_version', $this->_version);
-  } // End _log_version_number ()
+  }
+
+  /**
+   * Sets default values for the plugin to unforce errors after activation
+   * @access  public
+   * @since   1.0.0
+   * @return  void
+   */
+  private function _set_default_values()
+  {
+    update_option($this->_token . "_api-url", "https://api-v2.swissunihockey.ch/api/");
+    update_option($this->_token . "_api-key", "");
+    update_option($this->_token . "_api-version", "v2");
+  }
+
+  /**
+   * @return mixed
+   */
+  public function is_plugin_setup_done()
+  {
+    return get_option("wp-suapi_api-url");
+  }
 
 }

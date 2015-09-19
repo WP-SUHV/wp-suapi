@@ -42,10 +42,6 @@ require_once('includes/lib/class-wp-suapi-taxonomy.php');
 function WP_SUAPI()
 {
   $instance = WP_SUAPI::instance(__FILE__, '1.0.0');
-
-  if (is_null($instance->settings)) {
-    $instance->settings = WP_SUAPI_Settings::instance($instance);
-  }
   return $instance;
 }
 

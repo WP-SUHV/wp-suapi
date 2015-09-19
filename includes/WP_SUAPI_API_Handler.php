@@ -3,7 +3,6 @@ namespace WP_SUAPI;
 
 require_once('object/WP_SUAPI_API_Object.php');
 
-use WP_SUAPI\Exception\WP_SUAPI_Api_Exception;
 use GuzzleHttp\Client;
 use WP_SUAPI\Object\Club;
 use WP_SUAPI\Object\Game;
@@ -11,6 +10,7 @@ use WP_SUAPI\Object\LeagueAndGroup;
 use WP_SUAPI\Object\Location;
 use WP_SUAPI\Object\Ranking;
 use WP_SUAPI\Object\Team;
+use WP_SUAPI\Exception\WP_SUAPI_Api_Exception;
 
 if (!defined('ABSPATH')) {
   exit;
@@ -63,7 +63,6 @@ class WP_SUAPI_API_Handler
     $this->guzzle = new Client([
       'base_uri' => $this->getApiUri()
       , 'timeout' => 15.0
-      , 'verify' => false // sherwoodch: workaround for self certificate problem
       // , 'debug' => true
     ]);
 
@@ -187,10 +186,10 @@ class WP_SUAPI_API_Handler
    */
   public function isConnected()
   {
-    $response = $this->guzzle->get(WP_SUAPI_ENDPOINT_CLUBS);
-    if ($response->getStatusCode() === 200) {
-      return true;
-    } else {
+    try {
+      $response = $this->guzzle->get(WP_SUAPI_ENDPOINT_CLUBS);
+      return ($response->getStatusCode() === 200) ? true : false;
+    } catch (\GuzzleHttp\Exception\RequestException $e) {
       return false;
     }
   }
