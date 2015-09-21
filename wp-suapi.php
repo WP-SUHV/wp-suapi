@@ -33,6 +33,9 @@ require_once('includes/class-wp-suapi.php');
 require_once('includes/lib/class-wp-suapi-admin-api.php');
 require_once('includes/lib/class-wp-suapi-taxonomy.php');
 
+//Load Shortcodes
+require_once('includes/lib/WP_SUAPI_Shortcodes.php');
+
 /**
  * Returns the main instance of WP_SUAPI to prevent the need to use globals.
  *
