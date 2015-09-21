@@ -88,6 +88,11 @@ class WP_SUAPI
    */
   public $post_types;
 
+  /*
+   * Holds an instance of WP_SUAPI_Shortcode_Manager
+   */
+  private $shortcode_manager;
+
   /**
    * Constructor function.
    * @access  public
@@ -129,6 +134,10 @@ class WP_SUAPI
     $this->load_plugin_textdomain();
     add_action('init', array($this, 'load_localisation'), 0);
     add_action('init', array($this, 'register_cpt'), 0);
+
+    //Init Shortcode_Manager
+    $this->shortcode_manager = new \WP_SUAPI\WP_SUAPI_Shortcode_Manager();
+
   } // End __construct ()
 
   /**

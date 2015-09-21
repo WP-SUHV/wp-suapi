@@ -23,7 +23,8 @@
   "require": {
     "php": ">=5.4",
     "guzzlehttp/guzzle": "~6.0",
-    "gizburdt/cuztom": "dev-master"
+    "gizburdt/cuztom": "dev-master",
+    "twig/twig" : "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*",
