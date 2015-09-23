@@ -103,6 +103,6 @@ class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
   public function setUp()
   {
     \WP_Mock::setUp(); // Needed for define('ABSPATH..
-    self::$apiHandler = new WP_SUAPI_API_Handler("https://api-v2.swissunihockey.ch/api/", "", "");
+    self::$apiHandler = new WP_SUAPI_API_Handler("https://api-v2.swissunihockey.ch/api/", "", "", false);
   }
 }

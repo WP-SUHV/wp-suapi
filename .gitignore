@@ -6,3 +6,5 @@ phpunit.xml
 *.css
 *.map
 assets/js/*.js
+cache/*
+!cache/.keep
