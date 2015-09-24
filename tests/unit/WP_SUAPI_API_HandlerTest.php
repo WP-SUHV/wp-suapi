@@ -10,7 +10,7 @@ class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
 
   /**
    * Api handler
-   * @var ApiHandler $apiHandler
+   * @var WP_SUAPI_API_Handler $apiHandler
    */
   protected static $apiHandler;
 
@@ -82,8 +82,8 @@ class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
   public function testGetRankingsForLigaTeam()
   {
     self::$apiHandler->setYearForQuery(2014);
-    $rankings = self::$apiHandler->getRankingForTeam(new Team(428988, "Herren 3. Liga Gruppe 10"));
-    $this->assertInstanceOf('WP_SUAPI\Object\Ranking', $rankings[0]);
+    $rankingsTable = self::$apiHandler->getRankingForTeam(new Team(428988, "Herren 3. Liga Gruppe 10"));
+    $this->assertInstanceOf('WP_SUAPI\Object\Ranking', $rankingsTable->getRankings()[0]);
   }
 
   /**
@@ -93,8 +93,8 @@ class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
   public function testGetRankingsForNLATeam()
   {
     self::$apiHandler->setYearForQuery(2014);
-    $rankings = self::$apiHandler->getRankingForTeam(new Team(428535, "Herren NLA Gruppe 1"));
-    $this->assertInstanceOf('WP_SUAPI\Object\Ranking', $rankings[0]);
+    $rankingsTable = self::$apiHandler->getRankingForTeam(new Team(428535, "Herren NLA Gruppe 1"));
+    $this->assertInstanceOf('WP_SUAPI\Object\Ranking', $rankingsTable->getRankings()[0]);
   }
 
   /**
