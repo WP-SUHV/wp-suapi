@@ -16,7 +16,7 @@ class WP_SUAPI_Shortcode_Manager
     {
         $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates/');
         $this->twig = new Twig_Environment($loader, array(
-            //'cache' => 'C:\xampp\apps\dev\cache'
+            //'cache' => ''
         ));
 
         // Add Shortcode
