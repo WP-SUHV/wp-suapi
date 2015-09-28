@@ -59,6 +59,7 @@ class Team
 {
   private $teamId;
   private $teamName;
+  private $teamTitle;
   private $league;
 
   function __construct($teamId, $teamName)
@@ -125,6 +126,21 @@ class Team
     $this->league = $league;
   }
 
+  /**
+   * @return mixed
+   */
+  public function getTeamTitle()
+  {
+    return $this->teamTitle;
+  }
+
+  /**
+   * @param mixed $teamTitle
+   */
+  public function setTeamTitle($teamTitle)
+  {
+    $this->teamTitle = $teamTitle;
+  }
 }
 
 class LeagueAndGroup

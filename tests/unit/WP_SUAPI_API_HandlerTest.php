@@ -98,6 +98,15 @@ class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * Test get single Team by ID from api handle
+   */
+  public function testGetTeamByID()
+  {
+    $team = self::$apiHandler->GetTeamById(428535);
+    $this->assertInstanceOf('UHC Uster', $team->getTeamTitle());
+  }
+
+  /**
    * Init WP_Mock and API handler
    */
   public function setUp()
