@@ -1,28 +1,19 @@
 <?php
-
 namespace WP_SUAPI;
-
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-
 use WP_SUAPI\Object\Team;
-
 class WP_SUAPI_Shortcode_Manager
 {
-
     private $twig;
-
     public function __construct()
     {
         $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates/');
-        $this->twig = new Twig_Environment($loader, array(
-            //'cache' => ''
+        $this->twig = new Twig_Environment($loader, array(//'cache' => 'C:\xampp\apps\dev\cache'
         ));
-
         // Add Shortcode
         add_shortcode('wp-suapi-rankingtable', (array($this, 'rankingTable')));
     }
-
     /*
      * Shortcode function for ranking tables
      * Attributes:
@@ -39,20 +30,16 @@ class WP_SUAPI_Shortcode_Manager
             'team' => '0',
             'type' => '1'
         ), $atts);
-
         if ($a['year'] == 0 || $a['team'] == 0)
             return "";
-
         $apiHandler = \WP_SUAPI\WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
         $apiHandler->setYearForQuery($a['year']);
-        $rankings = $apiHandler->getRankingForTeam(new Team($a['team'], ''));
-
+        $rankingsTable = $apiHandler->getRankingForTeam(new Team($a['team'], ''));
         if ($a['type'] == '1') {
-            return $this->twig->render('wp-suapi-rankingtable-1.twig.html', array('rankings' => $rankings));
+            return $this->twig->render('wp-suapi-rankingtable-1.twig.html', array('rankings' => $rankingsTable->getRankings()));
         } else {
-            return $this->twig->render('wp-suapi-rankingtable-2.twig.html', array('rankings' => $rankings));
+            return $this->twig->render('wp-suapi-rankingtable-2.twig.html', array('rankings' => $rankingsTable->getRankings()));
         }
     }
 }
-
 ?>
