@@ -4,11 +4,17 @@ namespace WP_SUAPI;
 require_once('object/WP_SUAPI_API_Object.php');
 
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
+use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
+use Doctrine\Common\Cache\FilesystemCache;
 use WP_SUAPI\Object\Club;
 use WP_SUAPI\Object\Game;
 use WP_SUAPI\Object\LeagueAndGroup;
 use WP_SUAPI\Object\Location;
 use WP_SUAPI\Object\Ranking;
+use WP_SUAPI\Object\RankingTable;
 use WP_SUAPI\Object\Team;
 use WP_SUAPI\Exception\WP_SUAPI_Api_Exception;
 
@@ -54,18 +60,28 @@ class WP_SUAPI_API_Handler
    */
   private $guzzle;
 
-  public function __construct($uri, $key, $apiVersion)
+  public function __construct($uri, $key, $apiVersion, $useCache = false)
   {
     $this->uri = $uri;
     $this->key = $key;
     $this->apiVersion = $apiVersion;
     $this->yearForQuery = date("Y");
+    // Create default HandlerStack
+    $stack = HandlerStack::create();
+    if ($useCache) {
+      $stack->push(new CacheMiddleware(
+        new PrivateCacheStrategy(
+          new DoctrineCacheStorage(
+            new FilesystemCache('cache/')
+          )
+        )), 'cache');
+    }
     $this->guzzle = new Client([
       'base_uri' => $this->getApiUri()
+      , 'handler' => $stack
       , 'timeout' => 15.0
       // , 'debug' => true
     ]);
-
   }
 
 
@@ -75,7 +91,7 @@ class WP_SUAPI_API_Handler
    */
   public static function GET_INITIALIZED_API_HANDLER()
   {
-    return new WP_SUAPI_API_Handler(get_option("wp-suapi_api-url"), get_option("wp-suapi_api-key"), get_option("wp-suapi_api-version"));
+    return new WP_SUAPI_API_Handler(get_option("wp-suapi_api-url"), get_option("wp-suapi_api-key"), get_option("wp-suapi_api-version"), get_option("wp-suapi_extra-usecache"));
   }
 
   /**
@@ -145,7 +161,7 @@ class WP_SUAPI_API_Handler
 
   /**
    * Getranking for team
-   * @return Array(WP_SUAPI\Object\Ranking)
+   * @return RankingTable
    */
   public function getRankingForTeam($team)
   {
@@ -178,7 +194,16 @@ class WP_SUAPI_API_Handler
       );
       return $ranking;
     }, $cleanedRankingResults);
-    return $rankings;
+
+    // Find the separator and set it in the ranking
+    $rankingTable = new RankingTable($team->getLeague());
+    $rankingTable->setRankings($rankings);
+    array_map(function ($item, $key) use ($rankingTable) {
+      if (property_exists($item, 'separator')) {
+        $rankingTable->setRankingSeparator($key);
+      }
+    }, json_decode($response->getBody())->data->regions[0]->rows, array_keys(json_decode($response->getBody())->data->regions[0]->rows));
+    return $rankingTable;
   }
 
   /**

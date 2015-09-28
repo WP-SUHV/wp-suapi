@@ -192,7 +192,7 @@ class WP_SUAPI_Settings
         array(
           'id' => 'extra-usecache',
           'label' => __('Use cache', 'wp-suapi'),
-          'description' => __('Use a 12 hours cache for API results', 'wp-suapi'),
+          'description' => __('Cache the API results', 'wp-suapi'),
           'type' => 'checkbox',
           'default' => 'checked'
         )

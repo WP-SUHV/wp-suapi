@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 }
 
 //This class has been removed from autoloading for testing reasons
-require_once(WP_SUAPI_DIR. '/vendor/gizburdt/cuztom/cuztom.php');
+require_once(WP_SUAPI_DIR . '/vendor/gizburdt/cuztom/cuztom.php');
 
 use Cuztom_Post_Type;
 use WP_SUAPI\Object\Club;
