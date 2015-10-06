@@ -10,6 +10,8 @@ use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
 use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
 use Doctrine\Common\Cache\FilesystemCache;
 use WP_SUAPI\Object\Club;
+use WP_SUAPI\Object\Fixture;
+use WP_SUAPI\Object\FixtureList;
 use WP_SUAPI\Object\Game;
 use WP_SUAPI\Object\LeagueAndGroup;
 use WP_SUAPI\Object\Location;
@@ -26,6 +28,7 @@ define('WP_SUAPI_ENDPOINT_CLUBS', 'clubs');
 define('WP_SUAPI_ENDPOINT_TEAMS', 'teams');
 define('WP_SUAPI_ENDPOINT_GAMES', 'games');
 define('WP_SUAPI_ENDPOINT_RANKINGS', 'rankings');
+define('WP_SUAPI_ENDPOINT_FIXTURE_LIST', 'games');
 
 class WP_SUAPI_API_Handler
 {
@@ -160,7 +163,7 @@ class WP_SUAPI_API_Handler
   }
 
   /**
-   * Getranking for team
+   * Get ranking for team
    * @return RankingTable
    */
   public function getRankingForTeam($team)
@@ -204,6 +207,41 @@ class WP_SUAPI_API_Handler
       }
     }, json_decode($response->getBody())->data->regions[0]->rows, array_keys(json_decode($response->getBody())->data->regions[0]->rows));
     return $rankingTable;
+  }
+
+  /**
+   * Get fixture list for team
+   * @return FixtureList
+   */
+  public function getFixtureListForTeam(Team $team)
+  {
+    $team->setLeague($this->getLeagueByTeam($team));
+    $response = $this->guzzle->get(
+      WP_SUAPI_ENDPOINT_FIXTURE_LIST
+      . "?mode=" . "team"
+      . "&view=" . "full"
+      . "&games_per_page=" . "100"
+      . "&season=" . $this->yearForQuery
+      . "&team_id=" . $team->getTeamId());
+    if ($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
+    }
+    $fixtures = array_map(function ($fixtureInput) use ($team) {
+      $ranking = new Fixture(
+        $fixtureInput->link->ids[0],
+        $team->getLeague(),
+        $fixtureInput->cells[0]->text[0] . " " . $fixtureInput->cells[0]->text[1],
+        $fixtureInput->cells[1]->text[0] . " " . $fixtureInput->cells[1]->text[1],
+        $fixtureInput->cells[2]->text[0],
+        $fixtureInput->cells[3]->text[0],
+        $fixtureInput->cells[4]->text[0]
+      );
+      return $ranking;
+    }, json_decode($response->getBody())->data->regions[0]->rows);
+
+    $fixtureList = new FixtureList($team->getLeague());
+    $fixtureList->setFixtures($fixtures);
+    return $fixtureList;
   }
 
   /**

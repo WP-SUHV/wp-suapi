@@ -98,6 +98,17 @@ class WP_SUAPI_API_HandlerTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * Test fixture list for team query from api handler
+   * @return void
+   */
+  public function testGetFixtureListForLigaTeam()
+  {
+    self::$apiHandler->setYearForQuery(2015);
+    $fixtureList = self::$apiHandler->getFixtureListForTeam(new Team(428988, "Herren 3. Liga Gruppe 10"));
+    $this->assertInstanceOf('WP_SUAPI\Object\Fixture', $fixtureList->getFixtures()[0]);
+  }
+
+  /**
    * Init WP_Mock and API handler
    */
   public function setUp()
