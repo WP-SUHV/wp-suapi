@@ -46,7 +46,6 @@ class WP_SUAPI_Post_Types
   public function add_meta_boxes()
   {
     $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
-    print_r(get_option("api-club"));
     $this->post_types['team']->add_meta_box(
       'su_meta',
       'swiss unihockey Meta Data',

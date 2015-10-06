@@ -132,6 +132,26 @@ class WP_SUAPI_API_Handler
   }
 
   /**
+   * Get Team Details by team ID
+   * @param $teamId
+   * @return Team
+   * @throws WP_SUAPI_Api_Exception
+   */
+  public function getTeamById($teamId)
+  {
+    $response = $this->guzzle->get(
+        WP_SUAPI_ENDPOINT_TEAMS
+        . "/" . $teamId
+    );
+    if($response->getStatusCode() !== 200) {
+      throw new WP_SUAPI_Api_Exception($response->getBody());
+    }
+    $team = new Team($teamId, "");
+    $team->setTeamTitle(json_decode($response->getBody())->data->title);
+    return $team;
+  }
+
+  /**
    * Get all games for team
    * @return Array(WP_SUAPI\Object\Games)
    */

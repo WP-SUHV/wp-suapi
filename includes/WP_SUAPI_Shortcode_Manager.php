@@ -1,15 +1,12 @@
 <?php
-
 namespace WP_SUAPI;
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-
 use WP_SUAPI\Object\Team;
 
 class WP_SUAPI_Shortcode_Manager
 {
-
   private $twig;
 
   public function __construct()
@@ -17,7 +14,6 @@ class WP_SUAPI_Shortcode_Manager
     $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates/');
     $this->twig = new Twig_Environment($loader, array(//'cache' => 'C:\xampp\apps\dev\cache'
     ));
-
     // Add Shortcode
     add_shortcode('wp-suapi-rankingtable', (array($this, 'rankingTable')));
   }
@@ -27,18 +23,20 @@ class WP_SUAPI_Shortcode_Manager
    * Attributes:
    *  year: Year for query (e.g. 2014)
    *  team: swiss unihockey Team ID
+   *  highlight: highlight given team in table (1 = true, 0 = false)
    *  type: Table Type
-   *        |-1: Rg, Team, Sp, S, U, N, T, TD, P
-   *        |-2: Rg, Team, Sp, S, SnV, NnV, N, T, TD, P
+   *        |-1: Rg, Team, Sp, P
+   *        |-2: Rg, Team, Sp, S, U, N, T, TD, P
+   *        |-3: Rg, Team, Sp, S, SnV, NnV, N, T, TD, P
    */
   public function rankingTable($atts)
   {
     $a = shortcode_atts(array(
-      'year' => '0',
-      'team' => '0',
-      'type' => '1'
+        'year' => 0,
+        'team' =>  0,
+        'type' => 1,
+        'highlight' => 1,
     ), $atts);
-
     if ($a['year'] == 0 || $a['team'] == 0)
       return "";
 
@@ -46,12 +44,21 @@ class WP_SUAPI_Shortcode_Manager
     $apiHandler->setYearForQuery($a['year']);
     $rankingsTable = $apiHandler->getRankingForTeam(new Team($a['team'], ''));
 
-    if ($a['type'] == '1') {
-      return $this->twig->render('wp-suapi-rankingtable-1.twig.html', array('rankings' => $rankingsTable->getRankings()));
-    } else {
-      return $this->twig->render('wp-suapi-rankingtable-2.twig.html', array('rankings' => $rankingsTable->getRankings()));
+    $args = array('rankings' => $rankingsTable->getRankings());
+
+    if($a['highlight'] == 1)
+      $args = array_merge($args, array('team' => $apiHandler->getTeamById($a['team'])));
+
+    switch ($a['type']) {
+      case 1:
+        return $this->twig->render('wp-suapi-rankingtable-1.twig.html', $args);
+      case 2:
+        return $this->twig->render('wp-suapi-rankingtable-2.twig.html', $args);
+      case 3:
+        return $this->twig->render('wp-suapi-rankingtable-3.twig.html', $args);
+      default:
+        return "";
     }
   }
 }
-
 ?>

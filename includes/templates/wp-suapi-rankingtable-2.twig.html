@@ -1,28 +1,43 @@
-<table>
-  <tr>
-    <th>Rg</th>
-    <th>Team</th>
-    <th>Sp</th>
-    <th>S</th>
-    <th>SnV</th>
-    <th>NnV</th>
-    <th>N</th>
-    <th>T</th>
-    <th>TD</th>
-    <th>P</th>
-  </tr>
-  {% for item in rankings %}
-  <tr>
-    <td> {{ item.getRankingNr }}</td>
-    <td> {{ item.getRankingTeamName }}</td>
-    <td> {{ item.getRankingGamesCount }}</td>
-    <td> {{ item.getRankingGamesWon }}</td>
-    <td> {{ item.getRankingGamesWonAfterOvertime }}</td>
-    <td> {{ item.getRankingGamesLoseAfterOvertime }}</td>
-    <td> {{ item.getRankingGamesLose }}</td>
-    <td> {{ item.getRankingGoals }}</td>
-    <td> {{ item.getRankingGoalsDifference }}</td>
-    <td> {{ item.getRankingPoints }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<div id="wp-suapi-ranking-table-2">
+  <table>
+    <tr>
+      <th>Rg</th>
+      <th id="wp-suapi-ranking-table-teamName">Team</th>
+      <th>Sp</th>
+      <th>S</th>
+      <th>U</th>
+      <th>N</th>
+      <th>T</th>
+      <th>TD</th>
+      <th>P</th>
+    </tr>
+    {% for item in rankings %}
+    {% if team.getTeamTitle == item.getRankingTeamName %}
+    <tr class="wp-suapi-ranking-table-highlight">
+      <td> {{ item.getRankingNr }}</td>
+      <td> {{ item.getRankingTeamName }}</td>
+      <td> {{ item.getRankingGamesCount }}</td>
+      <td> {{ item.getRankingGamesWon }}</td>
+      <td> {{ item.getRankingGamesDraw }}</td>
+      <td> {{ item.getRankingGamesLose }}</td>
+      <td> {{ item.getRankingGoals }}</td>
+      <td> {{ item.getRankingGoalsDifference }}</td>
+      <td> {{ item.getRankingPoints }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td> {{ item.getRankingNr }}</td>
+      <td> {{ item.getRankingTeamName }}</td>
+      <td> {{ item.getRankingGamesCount }}</td>
+      <td> {{ item.getRankingGamesWon }}</td>
+      <td> {{ item.getRankingGamesDraw }}</td>
+      <td> {{ item.getRankingGamesLose }}</td>
+      <td> {{ item.getRankingGoals }}</td>
+      <td> {{ item.getRankingGoalsDifference }}</td>
+      <td> {{ item.getRankingPoints }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </table>
+  <p>Stand: {{ "now"|date("d.m.Y, H:i") }}</p>
+</div>
