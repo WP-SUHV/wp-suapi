@@ -564,14 +564,16 @@ class Ranking
    * @param $rankingPoints
    * @param $rankingGamesDraw
    */
-  public function __construct($rankingLeague, $rankingNr, $rankingTeamName, $rankingGamesCount, $rankingGamesWon, $rankingGamesLose, $rankingGamesDraw, $rankingGoals, $rankingGoalsDifference, $rankingPoints)
+  public function __construct($rankingLeague, $rankingNr, $rankingTeamName, $rankingGamesCount, $rankingGamesWon, $rankingGamesLose, $rankingGamesDraw, $rankingGoals, $rankingGoalsDifference, $rankingPoints, $rankingGamesWonAfterOvertime = '', $rankingGamesLoseAfterOvertime = '')
   {
     $this->rankingLeague = $rankingLeague;
     $this->rankingNr = $rankingNr;
     $this->rankingTeamName = $rankingTeamName;
     $this->rankingGamesCount = $rankingGamesCount;
     $this->rankingGamesWon = $rankingGamesWon;
+    $this->rankingGamesWonAfterOvertime = $rankingGamesWonAfterOvertime;
     $this->rankingGamesLose = $rankingGamesLose;
+    $this->rankingGamesLoseAfterOvertime = $rankingGamesLoseAfterOvertime;
     $this->rankingGoals = $rankingGoals;
     $this->rankingGoalsDifference = $rankingGoalsDifference;
     $this->rankingPoints = $rankingPoints;

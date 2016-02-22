@@ -208,13 +208,13 @@ class WP_SUAPI_API_Handler
       $ranking = new Ranking($team->getLeague(),
         $rankingInput->data->rank,
         $rankingInput->data->team->name,
-        $rankingInput->cells[2]->text[0],
         $rankingInput->cells[3]->text[0],
         $rankingInput->cells[4]->text[0],
         $rankingInput->cells[5]->text[0],
         $rankingInput->cells[6]->text[0],
         $rankingInput->cells[7]->text[0],
-        $rankingInput->cells[8]->text[0]
+        $rankingInput->cells[8]->text[0],
+        $rankingInput->cells[9]->text[0]
       );
       return $ranking;
     }, $cleanedRankingResults);

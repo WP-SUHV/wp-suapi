@@ -148,7 +148,7 @@ class WP_SUAPI
     try {
       $this->post_types = new WP_SUAPI_Post_Types();
     } catch (\GuzzleHttp\Exception\RequestException $e) {
-      new Cuztom_Notice($this->_token . " RequestException: " . $e->getMessage() . " - " . $e->getResponse()->getReasonPhrase(), 'error');
+      new Cuztom_Notice($this->_token . " RequestException: " . $e->getMessage(), 'error');
     }
   }
 
