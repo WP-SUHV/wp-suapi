@@ -68,7 +68,8 @@ class WP_SUAPI_API_Handler
     $this->uri = $uri;
     $this->key = $key;
     $this->apiVersion = $apiVersion;
-    $this->yearForQuery = date("Y");
+    // Make a switch for a new season until May
+    $this->yearForQuery = (date("n") < 6) ? (date("Y") -1) : date("Y");
     // Create default HandlerStack
     $stack = HandlerStack::create();
     if ($useCache) {
