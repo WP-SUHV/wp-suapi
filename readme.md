@@ -5,9 +5,9 @@
 **Tested up to:**      4.1.1
 **Stable tag:**        0.1.0
 
-## Description ##
-
 Wordpress plugin to connect with the swiss unihockey API v2.
+
+## Description ##
 
 ## Installation ##
 
@@ -25,13 +25,13 @@ Installing "wp-suapi" can be done either by searching for "wp-suapi" via the "Pl
 ### Testing ###
 1. Install dependencies with composer `composer install` /  `composer update`
 1. Run tests `vendor/bin/phpunit --configuration phpunit.xml --testsuite unit`
-
+1. Run specific test `vendor/bin/phpunit --configuration phpunit.xml --testsuite unit --filter testGetRankingsForLigaTeam`
 ## Screenshots ##
 
 
 ## Frequently Asked Questions ##
 
-### What is the plugin template for? ###
+### What is the plugin for? ###
 Connects your Wordpress site with the new swiss unihockey API v2.
 
 ## Changelog ##
