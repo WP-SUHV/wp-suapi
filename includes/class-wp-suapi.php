@@ -3,6 +3,7 @@
 if (!defined('ABSPATH')) {
   exit;
 }
+
 use WP_SUAPI\WP_SUAPI_Post_Types;
 
 define('WP_SUAPI_DEBUG', true);
@@ -133,6 +134,8 @@ class WP_SUAPI
     // Handle localisation
     $this->load_plugin_textdomain();
     add_action('init', array($this, 'load_localisation'), 0);
+
+    // Register Custom Post Type
     add_action('init', array($this, 'register_cpt'), 0);
 
     //Init Shortcode_Manager

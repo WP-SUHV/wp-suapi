@@ -16,29 +16,37 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/wp-suhv/cuztom"
+      "url": "https://github.com/humanmade/Custom-Meta-Boxes"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/scribu/wp-posts-to-posts"
     }
   ],
+  "extra" : {
+    "installer-paths" : {
+      "vendor/{$vendor}/{$name}/": ["type:wordpress-plugin"]
+    }
+  },
   "minimum-stability": "dev",
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.5",
     "guzzlehttp/guzzle": "~6.0",
     "kevinrob/guzzle-cache-middleware": "*",
     "doctrine/cache": "^1.0",
-    "gizburdt/cuztom": "dev-master",
-    "twig/twig" : "dev-master"
+    "twig/twig": "^2.0",
+    "jjgrainger/wp-custom-post-type-class": "dev-master",
+    "humanmade/custom-meta-boxes": "dev-master",
+    "scribu/lib-posts-to-posts": "dev-master",
+    "scribu/posts-to-posts": "^1.6.5"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.*",
-    "10up/wp_mock": "dev-master"
+    "phpunit/phpunit": "<6.0",
+    "10up/wp_mock": "dev-dev"
   },
   "autoload": {
     "psr-4": {
       "WP_SUAPI\\": "includes"
-    },
-    "classmap": [
-      "vendor/gizburdt/cuztom/cuztom.php",
-      "vendor/gizburdt/cuztom/classes"
-    ]
+    }
   }
 }

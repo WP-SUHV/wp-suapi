@@ -173,9 +173,13 @@ class WP_SUAPI_API_Handler
       $id = $item->link->ids[0];
       $date = $item->cells[0]->text[0];
       $time = $item->cells[0]->text[1];
-      $location = new Location($item->cells[1]->text[0], $item->cells[1]->text[1]);
-      $location->setLocationLongitude($item->cells[1]->link->x);
-      $location->setLocationLatitude($item->cells[1]->link->y);
+      if (isset($item->cells[1]->text[0]) && isset($item->cells[1]->text[1])) {
+        $location = new Location($item->cells[1]->text[0], $item->cells[1]->text[1]);
+        $location->setLocationLongitude($item->cells[1]->link->x);
+        $location->setLocationLatitude($item->cells[1]->link->y);
+      } else {
+        $location = new Location();
+      }
       $teamHome = $item->cells[2]->text[0];
       $teamAway = $item->cells[3]->text[0];
       $result = $item->cells[4]->text[0];

@@ -454,7 +454,7 @@ class Location
    * @param $locationName
    * @param $locationCity
    */
-  public function __construct($locationName, $locationCity)
+  public function __construct($locationName = "", $locationCity = "")
   {
     $this->locationName = $locationName;
     $this->locationCity = $locationCity;

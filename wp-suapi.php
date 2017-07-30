@@ -24,7 +24,8 @@ if (!defined('ABSPATH')) exit;
 // Must be set before the cuztom autoload
 
 define('WP_SUAPI_DIR', dirname(__FILE__));
-require __DIR__ . '/vendor/autoload.php';
+require( __DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/vendor/scribu/posts-to-posts/posts-to-posts.php');
 // Load plugin class files
 require_once('includes/class-wp-suapi-settings.php');
 require_once('includes/class-wp-suapi.php');
@@ -41,8 +42,8 @@ require_once('includes/lib/class-wp-suapi-taxonomy.php');
  */
 function WP_SUAPI()
 {
-  $instance = WP_SUAPI::instance(__FILE__, '1.0.0');
-  return $instance;
+    $instance = WP_SUAPI::instance(__FILE__, '1.0.0');
+    return $instance;
 }
 
 WP_SUAPI();
