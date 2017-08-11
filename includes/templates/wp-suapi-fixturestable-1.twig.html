@@ -1,0 +1,20 @@
+<div id="wp-suapi-ranking-table-1">
+  <table>
+    <tr>
+      <th>Date</th>
+      <th id="wp-suapi-fixtures-table-teamName">Home</th>
+      <th>Away</th>
+      <th>Location</th>
+      <th>Result</th>
+    </tr>
+    {% for item in fixtures %}
+    <tr>
+      <td> {{ item.getFixtureDatetime }}</td>
+      <td> {{ item.getFixtureHomeTeam }}</td>
+      <td> {{ item.getFixtureAwayTeam }}</td>
+      <td> {{ item.getFixtureLocation }}</td>
+      <td> {{ item.getFixtureResultText }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>

@@ -16,6 +16,7 @@ class WP_SUAPI_Shortcode_Manager
     ));
     // Add Shortcode
     add_shortcode('wp-suapi-rankingtable', (array($this, 'rankingTable')));
+    add_shortcode('wp-suapi-fixturetable', (array($this, 'fixturesTable')));
   }
 
   /*
@@ -40,7 +41,7 @@ class WP_SUAPI_Shortcode_Manager
     if ($a['year'] == 0 || $a['team'] == 0)
       return "";
 
-    $apiHandler = \WP_SUAPI\WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+    $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
     $apiHandler->setYearForQuery($a['year']);
     $rankingsTable = $apiHandler->getRankingForTeam(new Team($a['team'], ''));
 
@@ -56,6 +57,38 @@ class WP_SUAPI_Shortcode_Manager
         return $this->twig->render('wp-suapi-rankingtable-2.twig.html', $args);
       case 3:
         return $this->twig->render('wp-suapi-rankingtable-3.twig.html', $args);
+      default:
+        return "";
+    }
+  }
+
+  /*
+   * Shortcode function for game fixtures tables
+   * Attributes:
+   *  year: Year for query (e.g. 2014)
+   *  team: swiss unihockey Team ID
+   *  type: Table Type
+   *        |-1: Date, Home Team, Away Team, Location, Result
+   */
+  public function fixturesTable($atts)
+  {
+    $a = shortcode_atts(array(
+        'year' => 0,
+        'team' =>  0,
+        'type' => 1,
+    ), $atts);
+    if ($a['year'] == 0 || $a['team'] == 0)
+      return "";
+
+    $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+    $apiHandler->setYearForQuery($a['year']);
+    $rankingsTable = $apiHandler->getFixtureListForTeam(new Team($a['team'], ''));
+
+    $args = array('fixtures' => $rankingsTable->getFixtures());
+
+    switch ($a['type']) {
+      case 1:
+        return $this->twig->render('wp-suapi-fixturestable-1.twig.html', $args);
       default:
         return "";
     }
