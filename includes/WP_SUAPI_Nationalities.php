@@ -3,7 +3,7 @@ namespace WP_SUAPI;
 
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-use WP_SUAPI\Object\Team;
+use SUHV\Suapi\dto\Team;
 
 class WP_SUAPI_Nationalities
 {

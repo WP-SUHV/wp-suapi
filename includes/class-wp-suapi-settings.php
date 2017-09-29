@@ -1,10 +1,10 @@
 <?php
 
+use WP_SUAPI\WP_SUAPI_Helper;
+
 if (!defined('ABSPATH')) {
   exit;
 }
-
-use WP_SUAPI\WP_SUAPI_API_Handler;
 
 class WP_SUAPI_Settings
 {
@@ -150,7 +150,7 @@ class WP_SUAPI_Settings
 
     if ($this->check_api_connection_setup()) {
       try {
-        $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+        $apiHandler = WP_SUAPI_Helper::GET_INITIALIZED_API_HANDLER();
         if ($apiHandler->isConnected()) {
           $allClubs = array_reduce(
             $apiHandler->getClubs(),

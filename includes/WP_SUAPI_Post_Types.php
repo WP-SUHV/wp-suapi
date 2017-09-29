@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 use CPT;
 use CMB_Meta_Box;
-use WP_SUAPI\Object\Club;
+use SUHV\Suapi\dto\Club;
 
 class WP_SUAPI_Post_Types
 {
@@ -237,7 +237,7 @@ class WP_SUAPI_Post_Types
 
     private function get_teams_for_select()
     {
-        $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+        $apiHandler = WP_SUAPI_Helper::GET_INITIALIZED_API_HANDLER();
         if ($apiHandler->isConnected()) {
             return array_reduce(
                 $apiHandler->getTeamsForClub(new Club(get_option("wp-suapi_api-club"), "EMPTY_CLUB_CALL")),

@@ -21,28 +21,29 @@
     {
       "type": "vcs",
       "url": "https://github.com/scribu/wp-posts-to-posts"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/WP-SUHV/suapi"
     }
   ],
-  "extra" : {
-    "installer-paths" : {
-      "vendor/{$vendor}/{$name}/": ["type:wordpress-plugin"]
+  "extra": {
+    "installer-paths": {
+      "vendor/{$vendor}/{$name}/": [
+        "type:wordpress-plugin",
+        "type:wordpress-core"
+      ]
     }
   },
   "minimum-stability": "dev",
   "require": {
     "php": ">=5.5",
-    "guzzlehttp/guzzle": "~6.0",
-    "kevinrob/guzzle-cache-middleware": "*",
-    "doctrine/cache": "^1.0",
+    "wp-suhv/suapi": "dev-master",
     "twig/twig": "^2.0",
     "jjgrainger/wp-custom-post-type-class": "dev-master",
     "humanmade/custom-meta-boxes": "dev-master",
     "scribu/lib-posts-to-posts": "dev-master",
     "scribu/posts-to-posts": "^1.6.5"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "<6.0",
-    "10up/wp_mock": "dev-dev"
   },
   "autoload": {
     "psr-4": {

@@ -1,9 +1,11 @@
 <?php
 namespace WP_SUAPI;
 
+use SUHV\Suapi\ApiHandler;
+use SUHV\Suapi\dto\Team;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-use WP_SUAPI\Object\Team;
+use WP_SUAPI_Helper;
 
 class WP_SUAPI_Shortcode_Manager
 {
@@ -41,7 +43,7 @@ class WP_SUAPI_Shortcode_Manager
     if ($a['year'] == 0 || $a['team'] == 0)
       return "";
 
-    $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+    $apiHandler = WP_SUAPI_Helper::GET_INITIALIZED_API_HANDLER();
     $apiHandler->setYearForQuery($a['year']);
     $rankingsTable = $apiHandler->getRankingForTeam(new Team($a['team'], ''));
 
@@ -80,7 +82,7 @@ class WP_SUAPI_Shortcode_Manager
     if ($a['year'] == 0 || $a['team'] == 0)
       return "";
 
-    $apiHandler = WP_SUAPI_API_Handler::GET_INITIALIZED_API_HANDLER();
+    $apiHandler = WP_SUAPI_Helper::GET_INITIALIZED_API_HANDLER();
     $apiHandler->setYearForQuery($a['year']);
     $rankingsTable = $apiHandler->getFixtureListForTeam(new Team($a['team'], ''));
 
