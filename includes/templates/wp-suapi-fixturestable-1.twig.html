@@ -9,11 +9,11 @@
     </tr>
     {% for item in fixtures %}
     <tr>
-      <td> {{ item.getFixtureDatetime }}</td>
-      <td> {{ item.getFixtureHomeTeam }}</td>
-      <td> {{ item.getFixtureAwayTeam }}</td>
-      <td> {{ item.getFixtureLocation }}</td>
-      <td> {{ item.getFixtureResultText }}</td>
+      <td> {{ item.getGameDate }} {{ item.getGameTime }}</td>
+      <td> {{ item.getGameTeamHome }}</td>
+      <td> {{ item.getGameTeamAway }}</td>
+      <td> {{ item.getGameLocation }}</td>
+      <td> {{ item.getGameResult }}</td>
     </tr>
     {% endfor %}
   </table>
